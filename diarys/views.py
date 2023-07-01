@@ -22,13 +22,8 @@ def page_detail(request, page_id):
 
 def page_create(request):
     if request.method == "POST":
-        new_page = Page(
-            title=request.POST["title"],
-            content=request.POST["content"],
-            feeling=request.POST["feeling"],
-            score=request.POST["score"],
-        )
-        new_page.save()
+        form = PageForm(request.POST)
+        new_page = form.save()
         return redirect("page-detail", page_id=new_page.id)
     else:
         form = PageForm()
