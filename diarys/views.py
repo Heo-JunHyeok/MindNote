@@ -23,8 +23,9 @@ def page_detail(request, page_id):
 def page_create(request):
     if request.method == "POST":
         form = PageForm(request.POST)
-        new_page = form.save()
-        return redirect("page-detail", page_id=new_page.id)
+        if form.is_valid():
+            new_page = form.save()
+            return redirect("page-detail", page_id=new_page.id)
     else:
         form = PageForm()
-        return render(request, "diarys/page_form.html", {"form": form})
+    return render(request, "diarys/page_form.html", {"form": form})
