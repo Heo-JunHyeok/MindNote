@@ -1,6 +1,5 @@
 {% extends './base.html' %}
 
-<!-- content 블럭 처리 -->
 {% block content %}
   <div class="wrap-note">
     <div class="note">
@@ -10,7 +9,8 @@
             <li>
               <a href="{% url 'page-detail' page.id %}">
                 <div class="date">
-                  <span>{{page.dt_created}}</span>
+                  <span>{{page.dt_created|date:'d'}}</span>
+                  <p>{{page.dt_created|date:'M'}}</p>
                 </div>
                 <h2>{{page.title}}</h2>
                 <div class="score">
@@ -25,4 +25,3 @@
     </div>
   </div>
 {% endblock content %}
-<!-- content 블럭 처리 -->
