@@ -5,9 +5,8 @@ from .forms import PageForm
 
 # Create your views here.
 def page_list(request):
-    pages = Page.objects.all()
-    context = {"pages": pages}
-    return render(request, "diarys/page_list.html", context)
+    object_list = Page.objects.all()
+    return render(request, "diarys/page_list.html", {"object_list": object_list})
 
 
 def info(request):
@@ -15,9 +14,8 @@ def info(request):
 
 
 def page_detail(request, page_id):
-    page = Page.objects.get(id=page_id)
-    context = {"object": page}
-    return render(request, "diarys/page_detail.html", context)
+    object = Page.objects.get(id=page_id)
+    return render(request, "diarys/page_detail.html", {"object": object})
 
 
 def page_create(request):
@@ -29,3 +27,24 @@ def page_create(request):
     else:
         form = PageForm()
     return render(request, "diarys/page_form.html", {"form": form})
+
+
+def page_update(request, page_id):
+    object = Page.objects.get(id=page_id)
+    if request.method == "POST":
+        form = PageForm(request.POST, instance=object)
+        if form.is_valid():
+            form.save()
+            return redirect("page-detail", page_id=object.id)
+    else:
+        form = PageForm(instance=object)
+    return render(request, "diarys/page_form.html", {"form": form})
+
+
+def page_delete(request, page_id):
+    object = Page.objects.get(id=page_id)
+    if request.method == "POST":
+        object.delete()
+        return redirect("page-list")
+    else:
+        return render(request, "diarys/page_confirm_delete.html", {"object": object})
