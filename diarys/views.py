@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from .models import Page
 from .forms import PageForm
 
@@ -10,7 +11,12 @@ def index(request):
 
 def page_list(request):
     object_list = Page.objects.all()
-    return render(request, "diarys/page_list.html", {"object_list": object_list})
+    paginator = Paginator(object_list, 8)
+    curr_page_num = request.GET.get("page")
+    if curr_page_num is None:
+        curr_page_num = 1
+    page = paginator.page(curr_page_num)
+    return render(request, "diarys/page_list.html", {"page": page})
 
 
 def info(request):
@@ -18,7 +24,7 @@ def info(request):
 
 
 def page_detail(request, page_id):
-    object = Page.objects.get(id=page_id)
+    object = get_object_or_404(Page, id=page_id)
     return render(request, "diarys/page_detail.html", {"object": object})
 
 
@@ -34,7 +40,7 @@ def page_create(request):
 
 
 def page_update(request, page_id):
-    object = Page.objects.get(id=page_id)
+    object = get_object_or_404(Page, id=page_id)
     if request.method == "POST":
         form = PageForm(request.POST, instance=object)
         if form.is_valid():
@@ -46,7 +52,7 @@ def page_update(request, page_id):
 
 
 def page_delete(request, page_id):
-    object = Page.objects.get(id=page_id)
+    object = get_object_or_404(Page, id=page_id)
     if request.method == "POST":
         object.delete()
         return redirect("page-list")
