@@ -1,12 +1,12 @@
 {% extends './base.html' %}
 
 {% block content %}
-  {% if page_obj.object_list %}
+  {% if object_list %}
     <div class="wrap-note">
       <div class="note">
         <div class="note-list">
           <ul>
-            {% for object in page_obj.object_list %}
+            {% for object in object_list %}
               <li>
                 <a href="{% url 'page-detail' object.id %}">
                   <div class="date">
